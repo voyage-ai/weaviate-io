@@ -1,31 +1,29 @@
 ---
-title: Multimodal Embeddings
-description: "Weaviate's integration with VoyageAI's APIs allows you to access their models' capabilities directly from Weaviate."
-sidebar_position: 25
+title: Text Embeddings
+description: "Weaviate's integration with Voyage AI's APIs allows you to access their models' capabilities directly from Weaviate."
+sidebar_position: 20
 image: og/docs/integrations/provider_integrations_voyageai.jpg
 # tags: ['model providers', 'voyageai', 'embeddings']
 ---
+
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import FilteredTextBlock from '@site/src/components/Documentation/FilteredTextBlock';
 import PyConnect from '!!raw-loader!../_includes/provider.connect.py';
 import TSConnect from '!!raw-loader!../_includes/provider.connect.ts';
+import GoConnect from '!!raw-loader!/_includes/code/howto/go/docs/model-providers/1-connect/main.go';
 import PyCode from '!!raw-loader!../_includes/provider.vectorizer.py';
 import TSCode from '!!raw-loader!../_includes/provider.vectorizer.ts';
+import GoCode from '!!raw-loader!/_includes/code/howto/go/docs/model-providers/2-usage-text/main.go';
 
-# VoyageAI Multimodal Embeddings with Weaviate
+# Voyage AI Embeddings with Weaviate
 
-:::info Added in `v1.25.28`, `v1.26.12`, `1.27.8`
-:::
+Weaviate's integration with Voyage AI's APIs allows you to access their models' capabilities directly from Weaviate.
 
-Weaviate's integration with VoyageAI's APIs allows you to access their models' capabilities directly from Weaviate.
+[Configure a Weaviate vector index](#configure-the-vectorizer) to use an Voyage AI embedding model, and Weaviate will generate embeddings for various operations using the specified model and your Voyage AI API key. This feature is called the *vectorizer*.
 
-[Configure a Weaviate vector index](#configure-the-vectorizer) to use a VoyageAI embedding model, and Weaviate will generate embeddings for various operations using the specified model and your VoyageAI API key. This feature is called the *vectorizer*.
-
-Note this integration does not support Voyage AI's "interleaving" input mode. For this type of usage, import your own vectors with objects as [shown in this guide](../../starter-guides/custom-vectors.mdx).
-
-At [import time](#data-import), Weaviate generates multimodal object embeddings and saves them into the index. For [vector](#vector-near-text-search) and [hybrid](#hybrid-search) search operations, Weaviate converts text queries into embeddings. [Multimodal search operations](#vector-near-media-search) are also supported.
+At [import time](#data-import), Weaviate generates text object embeddings and saves them into the index. For [vector](#vector-near-text-search) and [hybrid](#hybrid-search) search operations, Weaviate converts text queries into embeddings.
 
 ![Embedding integration illustration](../_includes/integration_voyageai_embedding.png)
 
@@ -33,7 +31,7 @@ At [import time](#data-import), Weaviate generates multimodal object embeddings 
 
 ### Weaviate configuration
 
-Your Weaviate instance must be configured with the VoyageAI vectorizer integration (`multi2vec-voyageai`) module.
+Your Weaviate instance must be configured with the Voyage AI vectorizer integration (`text2vec-voyageai`) module.
 
 <details>
   <summary>For Weaviate Cloud (WCD) users</summary>
@@ -52,7 +50,7 @@ This integration is enabled by default on Weaviate Cloud (WCD) serverless instan
 
 ### API credentials
 
-You must provide a valid VoyageAI API key to Weaviate for this integration. Go to [VoyageAI](https://voyageai.com/) to sign up and obtain an API key.
+You must provide a valid Voyage AI API key to Weaviate for this integration. Go to [Voyage AI](https://www.voyageai.com/) to sign up and obtain an API key.
 
 Provide the API key to Weaviate using one of the following methods:
 
@@ -79,18 +77,27 @@ Provide the API key to Weaviate using one of the following methods:
     />
   </TabItem>
 
+  <TabItem value="go" label="Go">
+    <FilteredTextBlock
+      text={GoConnect}
+      startMarker="// START VoyageAIInstantiation"
+      endMarker="// END VoyageAIInstantiation"
+      language="goraw"
+    />
+  </TabItem>
+
 </Tabs>
 
 ## Configure the vectorizer
 
-[Configure a Weaviate index](../../manage-data/collections.mdx#specify-a-vectorizer) as follows to use a VoyageAI embedding model:
+[Configure a Weaviate index](../../manage-data/collections.mdx#specify-a-vectorizer) as follows to use a Voyage AI embedding model:
 
 <Tabs groupId="languages">
   <TabItem value="py" label="Python API v4">
     <FilteredTextBlock
       text={PyCode}
-      startMarker="# START BasicMMVectorizerVoyageAI"
-      endMarker="# END BasicMMVectorizerVoyageAI"
+      startMarker="# START BasicVectorizerVoyageAI"
+      endMarker="# END BasicVectorizerVoyageAI"
       language="py"
     />
   </TabItem>
@@ -98,9 +105,18 @@ Provide the API key to Weaviate using one of the following methods:
   <TabItem value="js" label="JS/TS API v3">
     <FilteredTextBlock
       text={TSCode}
-      startMarker="// START BasicMMVectorizerVoyageAI"
-      endMarker="// END BasicMMVectorizerVoyageAI"
+      startMarker="// START BasicVectorizerVoyageAI"
+      endMarker="// END BasicVectorizerVoyageAI"
       language="ts"
+    />
+  </TabItem>
+
+  <TabItem value="go" label="Go">
+    <FilteredTextBlock
+      text={GoCode}
+      startMarker="// START BasicVectorizerVoyageAI"
+      endMarker="// END BasicVectorizerVoyageAI"
+      language="goraw"
     />
   </TabItem>
 
@@ -114,8 +130,8 @@ You can specify one of the [available models](#available-models) for the vectori
   <TabItem value="py" label="Python API v4">
     <FilteredTextBlock
       text={PyCode}
-      startMarker="# START MMVectorizerVoyageAICustomModel"
-      endMarker="# END MMVectorizerVoyageAICustomModel"
+      startMarker="# START VectorizerVoyageAICustomModel"
+      endMarker="# END VectorizerVoyageAICustomModel"
       language="py"
     />
   </TabItem>
@@ -123,9 +139,18 @@ You can specify one of the [available models](#available-models) for the vectori
   <TabItem value="js" label="JS/TS API v3">
     <FilteredTextBlock
       text={TSCode}
-      startMarker="// START MMVectorizerVoyageAICustomModel"
-      endMarker="// END MMVectorizerVoyageAICustomModel"
+      startMarker="// START VectorizerVoyageAICustomModel"
+      endMarker="// END VectorizerVoyageAICustomModel"
       language="ts"
+    />
+  </TabItem>
+
+  <TabItem value="go" label="Go">
+    <FilteredTextBlock
+      text={GoCode}
+      startMarker="// START VectorizerVoyageAICustomModel"
+      endMarker="// END VectorizerVoyageAICustomModel"
+      language="goraw"
     />
   </TabItem>
 
@@ -144,14 +169,14 @@ import VectorizationBehavior from '/_includes/vectorization.behavior.mdx';
 
 ### Vectorizer parameters
 
-The following examples show how to configure VoyageAI-specific options.
+The following examples show how to configure Voyage AI-specific options.
 
 <Tabs groupId="languages">
   <TabItem value="py" label="Python API v4">
     <FilteredTextBlock
       text={PyCode}
-      startMarker="# START FullMMVectorizerVoyageAI"
-      endMarker="# END FullMMVectorizerVoyageAI"
+      startMarker="# START FullVectorizerVoyageAI"
+      endMarker="# END FullVectorizerVoyageAI"
       language="py"
     />
   </TabItem>
@@ -159,16 +184,24 @@ The following examples show how to configure VoyageAI-specific options.
   <TabItem value="js" label="JS/TS API v3">
     <FilteredTextBlock
       text={TSCode}
-      startMarker="// START FullMMVectorizerVoyageAI"
-      endMarker="// END FullMMVectorizerVoyageAI"
+      startMarker="// START FullVectorizerVoyageAI"
+      endMarker="// END FullVectorizerVoyageAI"
       language="ts"
+    />
+  </TabItem>
+
+  <TabItem value="go" label="Go">
+    <FilteredTextBlock
+      text={GoCode}
+      startMarker="// START FullVectorizerVoyageAI"
+      endMarker="// END FullVectorizerVoyageAI"
+      language="goraw"
     />
   </TabItem>
 
 </Tabs>
 
-For further details on model parameters, see the [VoyageAI API documentation](https://docs.voyageai.com/reference/multimodal-embeddings-api).
-
+For further details on model parameters, see the [Voyage AI Embedding API documentation](https://docs.voyageai.com/docs/embeddings).
 
 ## Header parameters
 
@@ -190,8 +223,8 @@ After configuring the vectorizer, [import data](../../manage-data/import.mdx) in
  <TabItem value="py" label="Python API v4">
     <FilteredTextBlock
       text={PyCode}
-      startMarker="# START MMBatchImportExample"
-      endMarker="# END MMBatchImportExample"
+      startMarker="# START BatchImportExample"
+      endMarker="# END BatchImportExample"
       language="py"
     />
   </TabItem>
@@ -199,9 +232,18 @@ After configuring the vectorizer, [import data](../../manage-data/import.mdx) in
  <TabItem value="js" label="JS/TS API v3">
     <FilteredTextBlock
       text={TSCode}
-      startMarker="// START MMBatchImportExample"
-      endMarker="// END MMBatchImportExample"
+      startMarker="// START BatchImportExample"
+      endMarker="// END BatchImportExample"
       language="ts"
+    />
+  </TabItem>
+
+  <TabItem value="go" label="Go">
+    <FilteredTextBlock
+      text={GoCode}
+      startMarker="// START BatchImportExample"
+      endMarker="// END BatchImportExample"
+      language="goraw"
     />
   </TabItem>
 
@@ -213,7 +255,7 @@ If you already have a compatible model vector available, you can provide it dire
 
 ## Searches
 
-Once the vectorizer is configured, Weaviate will perform vector and hybrid search operations using the specified VoyageAI model.
+Once the vectorizer is configured, Weaviate will perform vector and hybrid search operations using the specified Voyage AI model.
 
 ![Embedding integration at search illustration](../_includes/integration_voyageai_embedding_search.png)
 
@@ -240,6 +282,15 @@ The query below returns the `n` most similar objects from the database, set by `
       startMarker="// START NearTextExample"
       endMarker="// END NearTextExample"
       language="ts"
+    />
+  </TabItem>
+
+  <TabItem value="go" label="Go">
+    <FilteredTextBlock
+      text={GoCode}
+      startMarker="// START NearTextExample"
+      endMarker="// END NearTextExample"
+      language="goraw"
     />
   </TabItem>
 
@@ -275,33 +326,12 @@ The query below returns the `n` best scoring objects from the database, set by `
     />
   </TabItem>
 
-</Tabs>
-
-### Vector (near media) search
-
-When you perform a media search such as a [near image search](../../search/similarity.md#search-with-image), Weaviate converts the query into an embedding using the specified model and returns the most similar objects from the database.
-
-To perform a near media search such as near image search, convert the media query into a base64 string and pass it to the search query.
-
-The query below returns the `n` most similar objects to the input image from the database, set by `limit`.
-
-<Tabs groupId="languages">
-
- <TabItem value="py" label="Python API v4">
+  <TabItem value="go" label="Go">
     <FilteredTextBlock
-      text={PyCode}
-      startMarker="# START NearImageExample"
-      endMarker="# END NearImageExample"
-      language="py"
-    />
-  </TabItem>
-
- <TabItem value="js" label="JS/TS API v3">
-    <FilteredTextBlock
-      text={TSCode}
-      startMarker="// START NearImageExample"
-      endMarker="// END NearImageExample"
-      language="ts"
+      text={GoCode}
+      startMarker="// START HybridExample"
+      endMarker="// END HybridExample"
+      language="goraw"
     />
   </TabItem>
 
@@ -311,14 +341,43 @@ The query below returns the `n` most similar objects to the input image from the
 
 ### Available models
 
-- `voyage-multimodal-3` (Default)
+- voyage-3.5
+- voyage-3.5-lite
+- voyage-3 (default)
+- voyage-3-lite
+- voyage-context-3
+- voyage-large-2 (default for <= `v1.24.24`, `v1.25.17`, `v1.26.4`)
+- voyage-code-2
+- voyage-2
+- voyage-law-2
+- voyage-large-2-instruct
+- voyage-finance-2
+- voyage-multilingual-2
+
+<details>
+  <summary>
+    Model support history
+  </summary>
+
+- `v1.24.25`, `v1.25.18`, `v1.26.5`:
+    - Added `voyage-3`, `voyage-3-lite`, `voyage-3.5`, `voyage-3.5-lite`, `voyage-context-3`
+    - Default model changed to `voyage-3` from `voyage-large-2`
+- `v1.24.14`, `v1.25.1`:
+    - Added `voyage-large-2-instruct`
+    - Removed `voyage-lite-02-instruct`
+- `v1.24.9`:
+    - Added `voyage-law-2`, `voyage-lite-02-instruct`
+- `v1.24.2`:
+    - Introduced `text2vec-voyage`, with `voyage-large-2`, `voyage-code-2`, `voyage-2` support
+
+</details>
 
 ## Further resources
 
 ### Other integrations
 
-- [VoyageAI text embedding models + Weaviate](./embeddings.md).
-- [VoyageAI reranker models + Weaviate](./reranker.md).
+- [Voyage AI multimodal embedding models + Weaviate](./embeddings-multimodal.md)
+- [Voyage AI reranker models + Weaviate](./reranker.md).
 
 ### Code examples
 
@@ -329,7 +388,7 @@ Once the integrations are configured at the collection, the data management and 
 
 ### External resources
 
-- VoyageAI [Multimodal Embed API documentation](https://docs.voyageai.com/reference/multimodal-embeddings-api)
+- Voyage AI [Embeddings API documentation](https://docs.voyageai.com/docs/embeddings)
 
 ## Questions and feedback
 
